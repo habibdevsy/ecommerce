@@ -1,0 +1,48 @@
+ion-slide{
+  margin-bottom: 10px;
+}
+
+.ion-padding-verical{
+  margin-top: -28px;
+  text-align: center;
+}
+
+.price{
+  span{
+    color:black;
+    text-decoration: line-through;
+    margin: 10px;
+    font-size:medium;
+    vertical-align: top;
+  }
+}
+
+.separator {
+    border-bottom: 1px solid #d7d8da;
+}
+
+.spinner-hide{
+  display: none !important;
+}
+.spinner-show{
+  display: unset !important;
+}
+.btn-cart-heart {
+  text-align: center;
+  font-size: 26px;
+
+  .cart ,.heart{
+    padding: 5px;
+  }
+}
+
+.to {
+  position: fixed;
+  width: 100%;
+  height: 59px;
+  bottom: 0;
+  ion-col ion-button{
+    width: 100%;
+    height:50px;
+  }
+}

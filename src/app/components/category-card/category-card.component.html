@@ -1,0 +1,16 @@
+
+    <!-- (click)="view(category.name )" to products view -->
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6" *ngFor="let category of categories" class="category">
+        <ion-card (click)="view(category.id, category.name)">
+          <!-- <img [src]="category.imageUrl"> -->
+          <img [src]="'assets/images/products/product-1.jpg'">
+          <ion-card-subtitle>
+            {{ category.name }}
+          </ion-card-subtitle>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+

@@ -1,0 +1,16 @@
+{
+  "appId": "com.habibDEV.cellOmt",
+  "appName": "CELLOMT",
+  "bundledWebRuntime": false,
+  "npmClient": "yarn",
+  "webDir": "www",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  },
+  "cordova": {},
+
+    "windowsAndroidStudioPath": "C:\\Program Files\\Android Studio\\Android.Studio.4.1.2.x64.No.Installer\\bin\\studio64.exe"
+
+}

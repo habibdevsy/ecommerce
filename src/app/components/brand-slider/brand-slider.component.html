@@ -1,0 +1,5 @@
+<ion-slides [options]="brandsSlideOpts">
+  <ion-slide *ngFor="let brand of brands ">
+    <app-brand-card [brand]="brand" [type]="type"></app-brand-card>
+  </ion-slide>
+</ion-slides>

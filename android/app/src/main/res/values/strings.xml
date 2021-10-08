@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">CELLOMT</string>
+    <string name="title_activity_main">CELLOMT</string>
+    <string name="package_name">com.habibDEV.cellOmt</string>
+    <string name="custom_url_scheme">com.habibDEV.cellOmt</string>
+</resources>

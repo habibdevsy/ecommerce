@@ -1,0 +1,14 @@
+<ion-card>
+  <ion-col (click)="view(product.id, product.name, product.price, product.imageUrl, product.category_id,product.brand_id)" >
+    <img [src]="product.imageUrl">
+  </ion-col>
+  <ion-card-content>
+    <ion-label>
+      <p>{{product.price | currency}}</p>
+
+      <ion-icon [color]="product.liked ? 'primary' : ''" [name]="product.liked ? 'heart' : 'heart-outline' " (click)="go('heart')"></ion-icon>
+
+    </ion-label>
+    <h2>{{product.name | titlecase}}</h2>
+  </ion-card-content>
+</ion-card>

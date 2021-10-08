@@ -1,0 +1,7 @@
+<ion-slides [options]="productsSlideOpts" (ionSlideReachEnd)="moreData($event)">
+  <ion-slide *ngFor="let product of products ">
+    <app-product-card [product]="product"></app-product-card>
+
+  </ion-slide>
+
+</ion-slides>

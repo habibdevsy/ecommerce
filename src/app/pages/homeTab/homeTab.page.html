@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title class="title" slot="end">CELL OMT</ion-title>
+  </ion-toolbar>
+  <ion-toolbar id="search-toolbar">
+    <ion-searchbar placeholder="إبحث عن منتج"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+<ion-content  [fullscreen]="true">
+
+<!---- Featured Products ---->
+  <app-home-slide-header  categoryTitle= "false" type= "1" title="منتجات مميزة" [products]="productsByBest"></app-home-slide-header>
+  <app-product-slider [products]="productsByBest"></app-product-slider>
+<!---- The Most Wanted ---->
+<!-- <app-home-slide-header  categoryTitle= "false" type= "2" title="الأكثر طلبا" [products]="productsByBest"></app-home-slide-header>
+  <app-product-slider [products]="productsMostWanted"></app-product-slider> -->
+
+<!---- Brands Sliders ---->
+  <app-home-slide-header  categoryTitle= "false" type= "3"  title="الماركات"> [products]="brands"></app-home-slide-header>
+  <app-brand-slider [brands]="brands" type= "3"></app-brand-slider>
+
+  <!----Categories slider ---->
+  <div *ngFor="let item of categoryWithProducts">
+    <app-home-slide-header categoryTitle= "false" title={{item.name}} [categories]="categories" type= "4"></app-home-slide-header>
+    <app-product-slider  categoryId={{item.id}}></app-product-slider>
+  </div>
+
+<!---- Categories ---->
+  <app-home-slide-header categoryTitle= "true"  type= "4"  title=" الفئـــات"></app-home-slide-header>
+  <app-category-card [categories]="categories" type= "4"></app-category-card>
+
+</ion-content>
+

@@ -1,0 +1,66 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons class="btn-back" slot="start">
+      <ion-back-button ></ion-back-button>
+    </ion-buttons>
+    <ion-buttons class="btn-cart-heart" slot="end">
+      <ion-icon name="cart" class="cart"></ion-icon>
+      <ion-icon name="heart"  class="heart"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <app-product-view-slider [images]="images"></app-product-view-slider>
+
+  <div class="ion-padding-verical">
+    <h1 class="product-name">{{ name }}</h1>
+    <h4 class="price">
+      {{ price | currency}}
+      <span class="real-price">{{120 | currency}}</span>
+    </h4>
+    <h5 class="desc">
+      descrbtion descrbtion descrbtion descrbtion descrbtion descrbtiondescrbtiondescrbtion
+    </h5>
+  </div>
+
+  <div class="separator">
+    <span></span>
+  </div>
+<!-- TODO move to component -->
+  <ion-segment  value="related" [(ngModel)]="segment" (ionChange)="segmentChanged($event)" >
+    <ion-segment-button value="related">
+      <ion-label>مشابهة</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="fromCompany">
+      <ion-label>من  نفس الشركة</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+  <!-- related -->
+  <div *ngIf="segment == 'related'">
+    <app-products [products]="products"></app-products>
+  </div>
+  <!-- fromCompany -->
+  <div *ngIf="segment == 'fromCompany'">
+    <div [ngClass]=[spinnerShow]>
+      <ion-spinner ></ion-spinner>
+    </div>
+    <app-products [products]="productsByBrand"></app-products>
+  </div>
+  <div class="to">
+    <ion-row>
+      <ion-col size="6">
+        <ion-button expand="full">
+        <span>اشتري</span>
+        <!-- <ion-icon name="cart"></ion-icon> -->
+      </ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button expand="full">
+          <span>أضف إلى السلة</span>
+        <!-- <ion-icon name="cart"></ion-icon> -->
+      </ion-button>
+      </ion-col>
+    </ion-row>
+  </div>
+</ion-content>

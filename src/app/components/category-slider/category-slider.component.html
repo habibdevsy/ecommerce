@@ -1,0 +1,5 @@
+<ion-slides [options]="optionsSlideOpts">
+  <ion-slide *ngFor="let category of categories ">
+    <app-category-card [categories]="categories" [type]="type"></app-category-card>
+  </ion-slide>
+</ion-slides>

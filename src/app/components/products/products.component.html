@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <!-- <ion-title>{{ name }}</ion-title> -->
+    <ion-buttons class="btn-back" slot="start">
+      <ion-back-button ></ion-back-button>
+    </ion-buttons>
+    <ion-buttons class="btn-cart-heart" slot="end">
+      <ion-icon name="cart" class="cart"></ion-icon>
+      <ion-icon name="heart"  class="heart"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-grid>
+  <ion-row>
+    <ion-col size="6" *ngFor="let product of products" class="product">
+      <app-product-card [product]="product"></app-product-card>
+    </ion-col>
+  </ion-row>
+
+</ion-grid>
+<ion-infinite-scroll (ionInfinite)="doInfinite($event)">1111111111
+  <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+  </ion-infinite-scroll-content>
+</ion-infinite-scroll>
+
