@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Brand;
+use App\Http\Requests\ProductRequest;
+use App\Http\Resources\ProductResource;
 
 class ProductController extends Controller
 {
@@ -16,8 +18,11 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Category::select('id','name')->with('products:*')->get();
-        return response()->json(['data' => $products], 201);
+        // $products = Category::select('id','name')->with('products:*')->get();
+        // return response()->json(['data' => $products], 201);
+       //  $products =  ProductResource::collection(product::all());
+      $products = product::paginate(10);
+      return response()->json(['msg' => 'data fetched successfully', 'status_Code' => 201, 'data' => $products], 201);
     }
 
     /**
@@ -26,30 +31,15 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        $request->validate([
-            'name' => 'required',
-            'imageUrl' => 'required',
-            'price' => 'required',
-            'isBest' => 'required',
-            'brand_id' => 'required',
-            'category_id' => 'required',
-        ]);
-        $product = Product::create([
-            'name' => $request->name,
-            'imageUrl' => $request->imageUrl,
-            'price' => $request->price,
-            'isBest' => $request->isBest,
-            'brand_id' => $request->brand_id,
-            'category_id' => $request->category_id
-        ]);
-
+        $product = Product::create($request->validated());
         $category = Category::find($request->category_id);
         $brand = Brand::find($request->brand_id);
         $category =$category->products()->save($product);
         $brand = $brand->products()->save($product);
-        return response()->json(['data' => $product, 'msg' => 'success'], 201);
+        $product =  new ProductResource($product);
+        return response()->json(['msg' => 'data saved successfully', 'status_Code' => 201, 'data' => $product], 201);
     }
 
     /**
@@ -58,22 +48,26 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Product $product)
     {
-        $product = Product::find($id);
-        return response()->json(['data' => $product], 201);
+        $product = new ProductResource($product);
+        return response()->json(['msg' => 'data fetched successfully', 'status_Code' => 201, 'data' => $product], 201);
+        // $product = Product::find($id);
+        // return response()->json(['data' => $product], 201);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  int  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProductRequest $request, Product $product)
     {
-        //
+        $product->update($request->validated());
+        $product = new ProductResource($product);
+        return response()->json(['msg' => 'data updated successfully', 'status_Code' => 201, 'data' => $product], 201);
     }
 
     /**
@@ -82,9 +76,10 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Product $product)
     {
-        //
+        $product->delete();
+        return response()->json(['msg' => 'data deleted successfully', 'status_Code' => 201], 201);
     }
 
     /**
@@ -93,15 +88,16 @@ class ProductController extends Controller
      * @param  int  $category_id
      * @return \Illuminate\Http\Response
      */
-    public function productsOfCategory( $category_id)
+    public function productsOfCategory( $category_id )
     {
         //without category name
         $products  = Product::select()
                         ->where('category_id','=',$category_id)
-                        ->get();
+                        ->paginate(10);
+                        // ->get();
         // with category name
     //    $products = Category::select('id','name')->with('products:*')->find($category_id);
-        return response()->json(['data' => $products], 200);
+    return response()->json(['msg' => 'data fetched successfully', 'status_Code' => 201, 'data' => $products], 201);
     }
 
     /**
@@ -110,16 +106,16 @@ class ProductController extends Controller
      * @param  int  $brand_id
      * @return \Illuminate\Http\Response
      */
-    public function productsOfBrand( $brand_id)
+    public function productsOfBrand( $brand_id )
     {
         //without brand name
         $products  = Product::select()
                         ->where('brand_id','=',$brand_id)
-                        ->paginate(1);
+                        ->paginate(10);
                         // ->get();
         // with brand name
-    //    $products = Brand::select('id','name')->with('products:*')->find($brand_id);
-        return response()->json(['data' => $products,'status_code'=>200], 200);
+        //    $products = Brand::select('id','name')->with('products:*')->find($brand_id);
+        return response()->json(['msg' => 'data fetched successfully', 'status_Code' => 201, 'data' => $products], 201);
     }
 
     /**
@@ -130,11 +126,9 @@ class ProductController extends Controller
     public function productsBest()
     {
         $products  = Product::select()
-
                         ->where('isBest','=',1)
-                        // ->paginate(10);
-                        ->get();
-        return response()->json(['data' => $products], 200);
+                        ->paginate(10);
+                        // ->get();
+                        return response()->json(['msg' => 'data fetched successfully', 'status_Code' => 201, 'data' => $products], 201);
     }
-
 }
