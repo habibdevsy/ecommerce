@@ -38,7 +38,7 @@ Route::group([
     ], function() {
         Route::resource('category', CategoryController::class);
         Route::resource('brand', BrandController::class);
-        Route::resource('product', ProductController::class);
+        Route::ApiResource('product', ProductController::class);
         Route::get('productsOfCategory/{category_id}', [ProductController::class, 'productsOfCategory']);
         Route::get('productsBest', [ProductController::class, 'productsBest']);
     });
