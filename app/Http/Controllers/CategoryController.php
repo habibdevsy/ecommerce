@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Http\Resources\CategoryResource;
+use App\Http\Requests\CategoryRequest;
 
 class CategoryController extends Controller
 {
@@ -15,8 +17,8 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::all();
-        return response()->json(['data' => $categories], 201);
-    }
+        return response()->json(['msg' => 'data fetched successfully', 'status_Code' => 201, 'data' => $categories], 201);
+      }
 
     /**
      * Store a newly created resource in storage.
@@ -24,21 +26,12 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
-        $request->validate([
-            'name' => 'required',
-            'imageUrl' => 'required',
-        ]);
-        $category = Category::create([
-            'name' => $request->name,
-            'imageUrl' => $request->imageUrl
-        ]);
-        $success = $category->save();
-        if(!$success) {
-            return response()->json(['data' => $success], 000);
-        }
-        return response()->json(['data' => $success], 201);
+        $category = Category::create($request->validated());
+        $category->save();
+        $category =  new CategoryResource($category);
+        return response()->json(['msg' => 'data saved error', 'status_Code' => 201, 'data' => $category], 201);
     }
 
     /**
@@ -50,7 +43,9 @@ class CategoryController extends Controller
     public function show($id)
     {
         $category = Category::find($id);
-        return response()->json(['data' => $category], 201);
+        $category = new CategoryResource($category);
+        return response()->json(['msg' => 'data fetched successfully', 'status_Code' => 201, 'data' => $category], 201);
+
     }
 
     /**
@@ -60,13 +55,14 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CategoryRequest $request, $id)
     {
         $category = Category::find($id);
-        $category->name = $request->name;
-        $category->imageUrl = $request->imageUrl;
-        $category->update($request->all());
-        return response()->json(['data'=>$category,'msg'=>'success'],200);
+        if($category){
+            $category->update($request->validated());
+            $category = new CategoryResource($category);
+        }
+        return response()->json(['msg' => 'data updated successfully', 'status_Code' => 201, 'data' => $category], 201);
     }
 
     /**
@@ -75,20 +71,21 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Category $category)
     {
-        //
+        $category->delete();
+        return response()->json(['msg' => 'data deleted successfully', 'status_Code' => 201], 201);
     }
 
     /**
      * Show products for a specific category
      *
-     * @param  int  $category_id
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function categoriesWithProducts()
+    public function categoryWithProducts($id)
     {
-       $categories = Category::select('id','name')->with('products:*')->get();
-        return response()->json(['data' => $categories], 200);
+        $items = Category::select('id','name')->with('products:*')->find($id);
+        return response()->json(['msg' => 'data fetched successfully', 'status_Code' => 201, 'data' => $items], 201);
     }
 }
