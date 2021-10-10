@@ -36,9 +36,10 @@ Route::group([
     Route::group([
       'middleware' => ['auth:api', 'scope:admin']
     ], function() {
-        Route::resource('category', CategoryController::class);
+        Route::ApiResource('category', CategoryController::class);
         Route::resource('brand', BrandController::class);
         Route::ApiResource('product', ProductController::class);
+        Route::get('categoryWithProducts/{id}', [CategoryController::class, 'categoryWithProducts']);
         Route::get('productsOfCategory/{category_id}', [ProductController::class, 'productsOfCategory']);
         Route::get('productsBest', [ProductController::class, 'productsBest']);
     });

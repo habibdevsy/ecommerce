@@ -34,10 +34,7 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
     {
         $product = Product::create($request->validated());
-        $category = Category::find($request->category_id);
-        $brand = Brand::find($request->brand_id);
-        $category =$category->products()->save($product);
-        $brand = $brand->products()->save($product);
+        $product->save();
         $product =  new ProductResource($product);
         return response()->json(['msg' => 'data saved successfully', 'status_Code' => 201, 'data' => $product], 201);
     }
@@ -48,8 +45,9 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function show($id)
     {
+        $product = Product::find($id);
         $product = new ProductResource($product);
         return response()->json(['msg' => 'data fetched successfully', 'status_Code' => 201, 'data' => $product], 201);
         // $product = Product::find($id);
@@ -63,10 +61,13 @@ class ProductController extends Controller
      * @param  int  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(ProductRequest $request, Product $product)
+    public function update(ProductRequest $request, $id)
     {
-        $product->update($request->validated());
-        $product = new ProductResource($product);
+        $product = Product::find($id);
+        if($product){
+            $product->update($request->validated());
+            $product = new ProductResource($product);
+        }
         return response()->json(['msg' => 'data updated successfully', 'status_Code' => 201, 'data' => $product], 201);
     }
 
