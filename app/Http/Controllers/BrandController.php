@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CategoryResource;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use App\Models\Brand;
-use App\Models\Product;
-use Illuminate\Http\Response;
+use App\Http\Resources\BrandResource;
+use App\Http\Requests\BrandRequest;
 
 class BrandController extends Controller
 {
@@ -17,36 +17,24 @@ class BrandController extends Controller
      */
     public function index(): JsonResponse
     {
-        // $brands = Brand::all();
-        // return response()->json(['data' => $brands], 201);
-
-        $brands = Brand::select('id','name','imageUrl')->with('products:*')
-        ->get();
-        return response()->json(['data' => $brands], 201);
-
+        $brands = Brand::all();
+        return response()->json(['msg' => 'data fetched successfully', 'status_Code' => 201, 'data' => $brands], 201);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param BrandRequest $request
      * @return JsonResponse
      */
-    public function store(Request $request): JsonResponse
+    public function store(BrandRequest $request): JsonResponse
     {
-        $request->validate([
-            'name' => 'required',
-            'imageUrl' => 'required',
-        ]);
-        $brand = Brand::create([
-            'name' => $request->name,
-            'imageUrl' => $request->imageUrl
-        ]);
-        $success = $brand->save();
-        if(!$success) {
-            return response()->json(['data' => $success], 000);
-        }
-        return response()->json(['data' => $success,'msg'=>'success'], 201);
+
+        $brand = Brand::create($request->validated());
+        $brand->save();
+        $brand =  new BrandResource($brand);
+        return response()->json(['msg' => 'data saved error', 'status_Code' => 201, 'data' => $brand], 201);
+
     }
 
     /**
@@ -58,34 +46,39 @@ class BrandController extends Controller
     public function show(int $id): JsonResponse
     {
         $brand = Brand::find($id);
-        return response()->json(['data' => $brand], 201);
+        $brand = new CategoryResource($brand);
+        return response()->json(['msg' => 'data fetched successfully', 'status_Code' => 201, 'data' => $brand], 201);
+
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
+     * @param BrandRequest $request
      * @param int $id
      * @return JsonResponse
      */
-    public function update(Request $request, int $id): JsonResponse
+    public function update(BrandRequest $request, int $id): JsonResponse
     {
         $brand = Brand::find($id);
-        $brand->name = $request->name;
-        $brand->imageUrl = $request->imageUrl;
-        $brand->update($request->all());
-        return response()->json(['data'=>$brand,'msg'=>'success'],200);
+        if($brand){
+            $brand->update($request->validated());
+            $brand = new BrandResource($brand);
+        }
+        return response()->json(['msg' => 'data updated successfully', 'status_Code' => 201, 'data' => $brand], 201);
+
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
-     * @return Response
+     * @param Brand $brand
+     * @return JsonResponse
      */
-    public function destroy(int $id): Response
+    public function destroy(Brand $brand): JsonResponse
     {
-      return "ok";
+        $brand->delete();
+        return response()->json(['msg' => 'data deleted successfully', 'status_Code' => 201], 201);
     }
 
     /**
@@ -96,6 +89,6 @@ class BrandController extends Controller
     public function brandsWithProducts(): JsonResponse
     {
        $brands = Brand::select('id','name')->with('products:*')->get();
-        return response()->json(['data' => $brands], 200);
+        return response()->json(['msg' => 'data fetched successfully', 'status_Code' => 201, 'data' => $brands], 201);
     }
 }
