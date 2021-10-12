@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Http\Resources\CategoryResource;
@@ -12,9 +13,9 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function index()
+    public function index(): JsonResponse
     {
         $categories = Category::all();
         return response()->json(['msg' => 'data fetched successfully', 'status_Code' => 201, 'data' => $categories], 201);
@@ -23,10 +24,10 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param CategoryRequest $request
+     * @return JsonResponse
      */
-    public function store(CategoryRequest $request)
+    public function store(CategoryRequest $request): JsonResponse
     {
         $category = Category::create($request->validated());
         $category->save();
@@ -37,10 +38,10 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return JsonResponse
      */
-    public function show($id)
+    public function show(int $id): JsonResponse
     {
         $category = Category::find($id);
         $category = new CategoryResource($category);
@@ -52,10 +53,10 @@ class CategoryController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return JsonResponse
      */
-    public function update(CategoryRequest $request, $id)
+    public function update(CategoryRequest $request, int $id): JsonResponse
     {
         $category = Category::find($id);
         if($category){
@@ -68,10 +69,10 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Category $category
+     * @return JsonResponse
      */
-    public function destroy(Category $category)
+    public function destroy(Category $category): JsonResponse
     {
         $category->delete();
         return response()->json(['msg' => 'data deleted successfully', 'status_Code' => 201], 201);
@@ -80,10 +81,10 @@ class CategoryController extends Controller
     /**
      * Show products for a specific category
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return JsonResponse
      */
-    public function categoryWithProducts($id)
+    public function categoryWithProducts(int $id): JsonResponse
     {
         $items = Category::select('id','name')->with('products:*')->find($id);
         return response()->json(['msg' => 'data fetched successfully', 'status_Code' => 201, 'data' => $items], 201);
