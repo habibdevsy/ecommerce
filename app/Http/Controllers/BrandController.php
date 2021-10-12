@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\Brand;
 use App\Models\Product;
+use Illuminate\Http\Response;
 
 class BrandController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function index()
+    public function index(): JsonResponse
     {
         // $brands = Brand::all();
         // return response()->json(['data' => $brands], 201);
@@ -27,10 +29,10 @@ class BrandController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $request->validate([
             'name' => 'required',
@@ -50,10 +52,10 @@ class BrandController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return JsonResponse
      */
-    public function show($id)
+    public function show(int $id): JsonResponse
     {
         $brand = Brand::find($id);
         return response()->json(['data' => $brand], 201);
@@ -62,11 +64,11 @@ class BrandController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id): JsonResponse
     {
         $brand = Brand::find($id);
         $brand->name = $request->name;
@@ -78,20 +80,20 @@ class BrandController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return Response
      */
-    public function destroy($id)
+    public function destroy(int $id): Response
     {
-        //
+      return "ok";
     }
 
     /**
      * Show products for a specific category
      *
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function brandsWithProducts()
+    public function brandsWithProducts(): JsonResponse
     {
        $brands = Brand::select('id','name')->with('products:*')->get();
         return response()->json(['data' => $brands], 200);
